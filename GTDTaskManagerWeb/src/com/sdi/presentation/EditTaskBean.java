@@ -10,9 +10,10 @@ import org.primefaces.context.RequestContext;
 
 import alb.util.log.Log;
 
-import com.sdi.business.Services;
-import com.sdi.business.TaskService;
+import com.sdi.business.BusinessFactory;
 import com.sdi.business.exception.BusinessException;
+import com.sdi.business.services.Services;
+import com.sdi.business.services.TaskService;
 import com.sdi.dto.Task;
 
 @ManagedBean(name = "editTask")
@@ -81,7 +82,7 @@ public class EditTaskBean {
 			return;
 		}
 		
-		TaskService tService = Services.getTaskService();
+		TaskService tService = BusinessFactory.businessService.getTaskService();
 		try {
 			task = tService.findTaskById(Long.parseLong(id));
 			

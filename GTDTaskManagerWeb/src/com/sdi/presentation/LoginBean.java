@@ -8,8 +8,9 @@ import javax.faces.context.FacesContext;
 import alb.util.log.Log;
 import alb.util.log.LogLevel;
 
-import com.sdi.business.Services;
-import com.sdi.business.UserService;
+import com.sdi.business.BusinessFactory;
+import com.sdi.business.services.Services;
+import com.sdi.business.services.UserService;
 import com.sdi.dto.User;
 
 @ManagedBean(name = "login")
@@ -44,7 +45,7 @@ public class LoginBean {
 	public String login(){
 		UserService service;		
 		try {
-			service = Services.getUserService();
+			service = BusinessFactory.businessService.getUserService();
 			User u = service.findLoggableUser(login, password);
 			password = "";
 			

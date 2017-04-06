@@ -13,8 +13,9 @@ import javax.faces.validator.ValidatorException;
 
 import alb.util.log.Log;
 
-import com.sdi.business.AdminService;
-import com.sdi.business.Services;
+import com.sdi.business.BusinessFactory;
+import com.sdi.business.services.AdminService;
+import com.sdi.business.services.Services;
 import com.sdi.dto.User;
 
 @FacesValidator("usernameValidator")
@@ -28,7 +29,7 @@ public class UsernameValidator implements Validator {
 		
 		AdminService aServ;
 		try{
-			aServ = Services.getAdminService();
+			aServ = BusinessFactory.businessService.getAdminService();
 			List<User> existentUsers = aServ.findAllUsers();
 			for(User u: existentUsers){
 				if(u.getLogin().equals(value.toString())){

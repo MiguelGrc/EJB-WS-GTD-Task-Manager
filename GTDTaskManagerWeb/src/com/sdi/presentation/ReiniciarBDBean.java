@@ -10,9 +10,10 @@ import javax.faces.bean.ManagedBean;
 import alb.util.date.DateUtil;
 import alb.util.log.Log;
 
-import com.sdi.business.AdminService;
-import com.sdi.business.Services;
-import com.sdi.business.TaskService;
+import com.sdi.business.BusinessFactory;
+import com.sdi.business.services.AdminService;
+import com.sdi.business.services.Services;
+import com.sdi.business.services.TaskService;
 import com.sdi.dto.Category;
 import com.sdi.dto.Task;
 import com.sdi.dto.User;
@@ -27,8 +28,8 @@ public class ReiniciarBDBean {
 		TaskService tServ;
 
 		try {
-			aServ = Services.getAdminService();
-			tServ = Services.getTaskService();
+			aServ = BusinessFactory.businessService.getAdminService();
+			tServ = BusinessFactory.businessService.getTaskService();
 
 			UserDaoJdbcImpl dUser = new UserDaoJdbcImpl();
 
