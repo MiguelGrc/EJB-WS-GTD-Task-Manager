@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<f:view locale="#{settings.locale}">
+	<h:head>
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />
+		<title>#{msgs.tituloHead}</title>
+		<style type="text/css">	
+			h1, h2{
+				font-family: 'Roboto', sans-serif;
+			}
+		
+		
+			<!-- style for task list tables -->
+			.delay {
+				animation-name: blink-delay;
+				animation-duration: 1s;
+				animation-fill-mode: forwards;
+			}
+			@keyframes blink-delay {
+				to {background-color: rgba(255,0,0,0.45);}
+			}
+			.finish {
+				animation-name: blink-finish;
+				animation-duration: 1s;
+				animation-fill-mode: forwards;
+			}
+			@keyframes blink-finish {
+				to {background-color: rgba(0,255,0,0.45);}
+			}
+		</style>
+	</h:head>
+	<h:body>
+		<h:form id="form-cabecera">
+			<center>
+				<h1>#{msgs.tituloAplicacion1}</h1>
+
+				<h2>#{msgs.tituloAplicacion2}</h2>
+			</center>
+			<br />
+			<p:menubar>
+				<p:submenu id="idioma" label="#{msgs.textoIdioma}" icon="ui-icon-document" style="float:right">
+					<p:menuitem id="es" value="#{msgs.enlaceIdiomaES}"
+						actionListener="#{settings.setSpanish}" update="@all" immediate="true">
+					</p:menuitem>
+					<p:menuitem id="en" value="#{msgs.enlaceIdiomaEN}"
+						actionListener="#{settings.setEnglish}" update="@all" immediate="true">
+					</p:menuitem>
+				</p:submenu>
+				<f:facet name="options">
+					<p:commandButton id="item-cerrarSesion" value="#{msgs.cerrarSesion}" action="#{login.logout}" 
+					rendered="#{sessionScope.logedUser != null}" style="background-color:transparent; color:black; border-color:black;" />
+        		</f:facet>
+				<ui:insert name="extender-menu"></ui:insert>
+			</p:menubar>
+
+		</h:form>
+		<br/>
+
+		<ui:insert name="cuerpo">#{msgs.tituloDefectoCuerpo}</ui:insert>
+
+		<ui:insert name="pie">#{msgs.tituloPie}</ui:insert>
+
+	</h:body>
+</f:view>
+</html>

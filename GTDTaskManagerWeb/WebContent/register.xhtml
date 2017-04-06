@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-general.xhtml">
+
+	<ui:define name="titulo">
+    	#{msgs.tituloOperacionLogin}
+  	</ui:define>
+
+	<ui:define name="cuerpo">
+		<center>
+			<h:form id="form-registro">
+				<p:panel header="#{msgs.tituloOperacionRegistro}">
+					<h:panelGrid id="Grid" columns="1" cellpadding="5">
+				  #{msgs.username} 
+						<p:inputText value="#{register.login}"
+							placeholder="#{msgs.username}" required="true"
+							requiredMessage="#{msgs.form_username_requiredMessage}"
+							validator="usernameValidator"
+							id="login">
+						</p:inputText>
+						<p:message for="login" />
+  
+				  #{msgs.password} 
+						<p:password value="#{register.password}"
+							placeholder="#{msgs.password}" required="true"
+							requiredMessage="#{msgs.form_password_requiredMessage}"
+							validatorMessage="#{msgs.form_password_validatorMessage}"
+							id="password" >
+							<f:validateLength minimum="8" />
+							<f:validateRegex
+								pattern="(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,20})$" />
+						</p:password>
+						<p:message for="password" />
+			  
+						<p:password value="#{register.repeatedPassword}"
+							placeholder="#{msgs.repeatPassword}" required="true"
+							requiredMessage="#{msgs.form_repeatedPassword_requiredMessage}"
+							validatorMessage="#{msgs.form_repeatedPassword_validatorMessage}"
+							validator="#{register.validatePassword}"
+							id="repeated-password" >
+						</p:password>
+						<p:message for="repeated-password" />
+				  
+				  #{msgs.email}
+						<p:inputText value="#{register.email}"
+							placeholder="#{msgs.email}" required="true"
+							requiredMessage="#{msgs.form_email_requiredMessage}"
+							validatorMessage="#{msgs.form_email_validatorMessage}"
+							id="email">
+							<f:validateRegex pattern=".+@.+\.[a-z]+" />
+						</p:inputText>
+						<p:message for="email" />
+						
+						<f:facet name="footer">
+							<p:commandButton id="register-button" value="#{msgs.botonRegister}"
+								action="#{register.register}" update="Grid" process="@form">
+							</p:commandButton>
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+		</center>
+	</ui:define>
+
+	<ui:define name="pie">
+	</ui:define>
+
+</ui:composition>

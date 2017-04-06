@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-general.xhtml">
+
+	<ui:define name="extender-menu">
+   		<p:menuitem id="item-tareas-inbox" value="#{msgs.inbox}" action="#{tasks.listarInbox}" update="form-tasks" />
+   		<p:menuitem id="item-tareas-hoy" value="#{msgs.hoy}" action="#{tasks.listarHoy}" update="form-tasks" />
+   		<p:menuitem id="item-tareas-semana" value="#{msgs.semana}" action="#{tasks.listarSemana}" update="form-tasks" />
+    </ui:define>
+
+	<ui:define name="cuerpo">
+		<center>
+			<h:form id="form-tasks">
+				<p:panel header="#{msgs.tituloOperacionTareas} - #{msgs[tasks.actual]}">
+					<p:dataTable id="table-tasks" var="task" value="#{tasks.tasks}" selectionMode="single" widgetVar="tbWidget"
+						selection="#{tasks.selected}" rowKey="#{task.id}"
+						emptyMessage="#{msgs.listaVacia}" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                        rows="8" rowStyleClass="#{tasks.delayed(task) ? (tasks.finished(task) ? 'finish' : 'delay') : (tasks.finished(task) ? 'finish' : null)}" 
+                        sortBy="#{tasks.actual eq 'inbox' ? task.planned : ''}">
+						<p:ajax event="rowSelect" update=":form-tasks:edit-task-button :form-tasks:finish-task-button" 
+							listener="#{tasks.onRowSelect}"/>
+						<p:column headerText="#{msgs.tituloColumnaTareaTitulo}"
+							sortBy="#{task.title}" sortable="#{tasks.actual eq 'semana'}"
+							filterBy="#{tasks.actual eq 'inbox' ? task.title : task.comments}" filterMatchMode="contains">
+							<h:outputText value="#{task.title}" />
+						</p:column>
+						<p:column headerText="#{msgs.tituloColumnaTareaCreada}">
+							<h:outputText value="#{task.created}">
+								<f:convertDateTime type="date" dateStyle="full" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{msgs.tituloColumnaTareaPlaneada}"
+							sortBy="#{task.planned}" sortable="#{tasks.actual eq 'semana' or tasks.actual eq 'hoy'}">
+							<h:outputText value="#{task.planned}">
+								<f:convertDateTime type="date" dateStyle="full" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{msgs.tituloColumnaTareaFinalizada}" rendered="#{tasks.showFinished}">
+							<h:outputText value="#{task.finished}">
+								<f:convertDateTime type="date" dateStyle="full" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{msgs.tituloColumnaTareaCategoria}"
+							sortBy="#{tasks.userCat(task)}" sortable="#{tasks.actual eq 'hoy'}" rendered="#{tasks.actual ne 'inbox'}">
+							<h:outputText value="#{tasks.userCat(task)}" />
+						</p:column>
+						<p:column headerText="#{msgs.tituloColumnaTareaComentarios}">
+							<h:outputText value="#{task.comments}" />
+						</p:column>
+						<f:facet name="#{tasks.actual eq 'inbox' ? 'footer' : ''}">
+							<p:selectBooleanCheckbox id="finished-checkbox" value="#{tasks.showFinished}" itemLabel="#{msgs.mostrarFinalizadas}">
+								<p:ajax update="table-tasks" listener="#{tasks.listarInbox}"/>
+							</p:selectBooleanCheckbox>
+						</f:facet>
+					</p:dataTable>
+					<f:facet name="footer">
+						<div align="center">
+							<p:commandButton id="create-task-button" value="#{msgs.crearTarea}" onclick="PF('create-task-dialog').show();" />
+							<p:commandButton id="edit-task-button" value="#{msgs.editarTarea}" actionListener="#{editTask.load(tasks.selected.id)}" 
+								update="form-edit-task" disabled="#{tasks.disabled}" />
+							<p:commandButton id="finish-task-button" value="#{msgs.finalizarTarea}" actionListener="#{tasks.finishTask}" 
+								disabled="#{tasks.disabled}" />
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:form>
+			
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+			
+			<p:dialog header="#{msgs.crearTarea}" modal="true" widgetVar="create-task-dialog" resizable="false">
+				<h:form id="form-create-task">
+					<div class="ui-fluid">
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputLabel for="create-task-title" value="#{msgs.tituloColumnaTareaTitulo}:" />
+							<p:inputText id="create-task-title" value="#{createTask.title}" required="true" label="create-task-title" 
+								requiredMessage="#{msgs.form_create_createTask_requiredMessage}"/>
+							<h:outputLabel for="create-task-comments" value="#{msgs.tituloColumnaTareaComentarios}:" />
+							<p:inputTextarea id="create-task-comments" rows="4" cols="35" value="#{createTask.comments}" label="create-task-comments" />
+							<h:outputLabel for="create-task-category-selector" value="#{msgs.tituloColumnaTareaCategoria}:" />
+							<p:selectOneMenu id="create-task-category-selector" value="#{createTask.categoryId}">
+								<f:selectItem itemValue="0" itemLabel="- #{msgs.ninguna} -" />
+								<f:selectItems value="#{tasks.categories}" />
+							</p:selectOneMenu>
+							<h:outputLabel for="create-task-planned" value="#{msgs.tituloColumnaTareaPlaneada}:" />
+							<p:calendar id="create-task-planned" value="#{createTask.planned}" mindate="#{createTask.planned}" />
+							<f:facet name="footer">
+								<p:commandButton id="create-task-create-button" value="#{msgs.crearTarea}" actionListener="#{tasks.createTask}" 
+									update="growl @form form-tasks"/>
+							</f:facet>
+						</h:panelGrid>
+					</div>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="#{msgs.editarTarea}" modal="true" widgetVar="edit-task-dialog" resizable="false">
+				<h:form id="form-edit-task">
+					<div class="ui-fluid">
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputLabel for="edit-task-title" value="#{msgs.tituloColumnaTareaTitulo}:" />
+							<p:inputText id="edit-task-title" value="#{editTask.title}" required="true" label="edit-task-title" 
+								requiredMessage="#{msgs.form_create_createTask_requiredMessage}"/>
+							<h:outputLabel for="edit-task-comments" value="#{msgs.tituloColumnaTareaComentarios}:" />
+							<p:inputTextarea id="edit-task-comments" rows="4" cols="35" value="#{editTask.comments}" label="edit-task-comments" />
+							<h:outputLabel for="edit-task-category-selector" value="#{msgs.tituloColumnaTareaCategoria}:" />
+							<p:selectOneMenu id="edit-task-category-selector" value="#{editTask.categoryId}">
+								<f:selectItem itemValue="0" itemLabel="- #{msgs.ninguna} -" />
+								<f:selectItems value="#{tasks.categories}" />
+							</p:selectOneMenu>
+							<h:outputLabel for="edit-task-planned" value="#{msgs.tituloColumnaTareaPlaneada}:" />
+							<p:calendar id="edit-task-planned" value="#{editTask.planned}" mindate="#{editTask.today}" />
+							<f:facet name="footer">
+								<p:commandButton id="edit-task-edit-button" value="#{msgs.editarTarea}" actionListener="#{tasks.editTask}" 
+									update="growl @form form-tasks"/>
+							</f:facet>
+						</h:panelGrid>
+					</div>
+				</h:form>
+			</p:dialog>
+			
+		</center>
+
+	</ui:define>
+
+	<ui:define name="pie">
+	</ui:define>
+
+</ui:composition>
