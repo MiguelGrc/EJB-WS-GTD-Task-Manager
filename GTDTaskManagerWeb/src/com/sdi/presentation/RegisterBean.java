@@ -12,8 +12,8 @@ import javax.faces.validator.ValidatorException;
 
 import alb.util.log.Log;
 
-import com.sdi.business.Services;
-import com.sdi.business.UserService;
+import com.sdi.business.BusinessFactory;
+import com.sdi.business.services.UserService;
 import com.sdi.dto.User;
 
 @ManagedBean(name = "register")
@@ -54,7 +54,7 @@ public class RegisterBean implements Serializable {
 	public String register(){
 		UserService uService;
 		try{
-			uService= Services.getUserService();
+			uService= BusinessFactory.businessService.getUserService();
 			User u= new User();
 			
 			u.setLogin(login).setPassword(password).setEmail(email);

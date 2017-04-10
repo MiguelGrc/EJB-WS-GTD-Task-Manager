@@ -1,0 +1,4 @@
+Para poder ejecutarse bien, incluir en widfly/standalone/deployments:
+									->hsqldb.jar
+									->GTD-ds.xml
+Ambos se incluyen en la carpeta Resources.

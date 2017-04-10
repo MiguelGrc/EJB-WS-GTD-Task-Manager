@@ -13,9 +13,10 @@ import org.primefaces.event.SelectEvent;
 
 import alb.util.log.Log;
 
-import com.sdi.business.AdminService;
-import com.sdi.business.Services;
+import com.sdi.business.BusinessFactory;
 import com.sdi.business.exception.BusinessException;
+import com.sdi.business.services.AdminService;
+import com.sdi.business.services.Services;
 import com.sdi.dto.User;
 import com.sdi.dto.types.UserStatus;
 
@@ -70,7 +71,7 @@ public class UsersBean {
 	public String listarNoAdmins(){
 		AdminService aService;
 		try{
-			aService= Services.getAdminService();
+			aService= BusinessFactory.businessService.getAdminService();
 			users = filtrarNoAdmin(aService.findAllUsers());
 			
 			Log.debug("Usuarios listados");
@@ -95,7 +96,7 @@ public class UsersBean {
 	public void baja(ActionEvent e) {
 		AdminService service;
 		try {
-			service = Services.getAdminService();
+			service = BusinessFactory.businessService.getAdminService();
 			if(selected != null){
 				service.deepDeleteUser(selected.getId());
 				Log.debug("Usuario %s eliminado", selected.getLogin());
@@ -110,7 +111,7 @@ public class UsersBean {
 	public void cambiarEstado(ActionEvent e) {
 		AdminService service;
 		try {
-			service = Services.getAdminService();
+			service = BusinessFactory.businessService.getAdminService();
 			if(selected != null){
 				if(selected.getStatus() == UserStatus.ENABLED){
 					service.disableUser(selected.getId());
@@ -131,7 +132,7 @@ public class UsersBean {
 		try {
 			reiniciarBD.reiniciar();
 			Log.debug("Base de datos reiniciada");
-			users = filtrarNoAdmin(Services.getAdminService().findAllUsers());
+			users = filtrarNoAdmin(BusinessFactory.businessService.getAdminService().findAllUsers());
 		} catch (BusinessException ex) {
 			Log.error("Error al reiniciar la base de datos");
 		}

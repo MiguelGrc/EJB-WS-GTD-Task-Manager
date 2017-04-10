@@ -18,9 +18,10 @@ import org.primefaces.event.SelectEvent;
 import alb.util.date.DateUtil;
 import alb.util.log.Log;
 
-import com.sdi.business.Services;
-import com.sdi.business.TaskService;
+import com.sdi.business.BusinessFactory;
 import com.sdi.business.exception.BusinessException;
+import com.sdi.business.services.Services;
+import com.sdi.business.services.TaskService;
 import com.sdi.dto.Category;
 import com.sdi.dto.Task;
 import com.sdi.dto.User;
@@ -133,7 +134,7 @@ public class TasksBean {
 		TaskService tService;
 		actual = "inbox";
 		try{
-			tService = Services.getTaskService();
+			tService = BusinessFactory.businessService.getTaskService();
 			
 			tasks = tService.findInboxTasksByUserId(user.getId());
 			
@@ -157,7 +158,7 @@ public class TasksBean {
 		TaskService tService;
 		actual = "hoy";
 		try{
-			tService = Services .getTaskService();
+			tService = BusinessFactory.businessService.getTaskService();
 			
 			tasks = tService.findTodayTasksByUserId(user.getId());
 			disabled = true;
@@ -176,7 +177,7 @@ public class TasksBean {
 		actual = "semana";
 		TaskService tService;
 		try{
-			tService = Services .getTaskService();
+			tService = BusinessFactory.businessService.getTaskService();
 			
 			tasks = tService.findWeekTasksByUserId(user.getId());
 			disabled = true;
@@ -194,7 +195,7 @@ public class TasksBean {
 		TaskService tService;
 		List<Category> cat;
 		try{
-			tService=Services.getTaskService();
+			tService=BusinessFactory.businessService.getTaskService();
 			cat = tService.findCategoriesByUserId(user.getId());
 			for(Category c : cat)
 				categories.put(c.getName(), String.valueOf(c.getId()));
@@ -217,7 +218,7 @@ public class TasksBean {
 		TaskService tService;
 		if(t.getCategoryId() != null){
 			try{
-				tService = Services.getTaskService();
+				tService = BusinessFactory.businessService.getTaskService();
 				Category cat = tService.findCategoryById(id);
 				return cat.getName();
 			} catch(Exception e){
@@ -251,7 +252,7 @@ public class TasksBean {
 				.getSessionMap().get("logedUser");
 		t.setUserId(u.getId());
 		
-		TaskService tService = Services.getTaskService();
+		TaskService tService = BusinessFactory.businessService.getTaskService();
 		try {
 			tService.createTask(t);
 			Log.debug("Creada tarea %s", t.getTitle());
@@ -277,7 +278,7 @@ public class TasksBean {
 		else
 			t.setCategoryId(editTaskBean.getCategoryId());
 		
-		TaskService tService = Services.getTaskService();
+		TaskService tService = BusinessFactory.businessService.getTaskService();
 		try {
 			tService.updateTask(t);
 			Log.debug("Editada tarea %s", t.getTitle());
@@ -293,7 +294,7 @@ public class TasksBean {
 		if(selected == null || finished(selected))
 			return;
 		
-		TaskService tService = Services.getTaskService();
+		TaskService tService = BusinessFactory.businessService.getTaskService();
 		
 		try {
 			tService.markTaskAsFinished(selected.getId());

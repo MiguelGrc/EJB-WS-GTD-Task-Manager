@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.util.Properties;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
@@ -19,6 +22,7 @@ import com.sdi.persistence.PersistenceException;
 public class Jdbc {
 	private static final String DATABASE_PROPERTIES_FILE = "database.properties";
 	private static final String QUERIES_PROPERTIES_FILE = "sql_queries.properties";
+	private static final String PERSISTANCE_PROPERTIES_FILE = "persistance.properties";
 	
 	private static final String DATABASE_URL;
 	private static final String DATABASE_USER;
@@ -26,28 +30,30 @@ public class Jdbc {
 	private static final String DATABASE_DRIVER;
 	
 	private static Properties sqlQueries;
+	private static Properties persistanceConfig;
 	private static DataSource dataSource;
 	
 	static {
 		Properties dbConfig = loadProperties( DATABASE_PROPERTIES_FILE );
 		sqlQueries = loadProperties( QUERIES_PROPERTIES_FILE );
+		persistanceConfig = loadProperties(PERSISTANCE_PROPERTIES_FILE);
 		
 		DATABASE_URL = dbConfig.getProperty( "DATABASE_URL" );
 		DATABASE_USER = dbConfig.getProperty( "DATABASE_USER" );
 		DATABASE_PASSWORD = dbConfig.getProperty( "DATABASE_PASSWORD" );
 		DATABASE_DRIVER = dbConfig.getProperty( "DATABASE_DRIVER" ); 
 	
-		dataSource = configureDataSource(dbConfig);
+		dataSource = loadDataSource();
 	}
 
-	private static DataSource configureDataSource(Properties dbConfig) {
-		BasicDataSource ds = new BasicDataSource();
-		ds.setDriverClassName( DATABASE_DRIVER );
-		ds.setUsername( DATABASE_USER );
-		ds.setPassword( DATABASE_PASSWORD );
-		ds.setUrl( DATABASE_URL );
-		return ds;
-	}
+//	private static DataSource configureDataSource(Properties dbConfig) {
+//		BasicDataSource ds = new BasicDataSource();
+//		ds.setDriverClassName( DATABASE_DRIVER );
+//		ds.setUsername( DATABASE_USER );
+//		ds.setPassword( DATABASE_PASSWORD );
+//		ds.setUrl( DATABASE_URL );
+//		return ds;
+//	}
 
 	private static ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
 
@@ -129,6 +135,19 @@ public class Jdbc {
 			throw new PersistenceException("Wrong configutation file " + fileName );
 		}
 		return prop;
+	}
+	
+	private static DataSource loadDataSource(){
+		try {
+			String jndiKey = persistanceConfig.getProperty("JNDI_DATASOURCE");
+
+			Context ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup(jndiKey);
+			return ds;
+			
+		} catch (NamingException e) {
+			throw new RuntimeException("Can't open JDBC conection from JNDI", e);
+		}
 	}
 
 }
