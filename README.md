@@ -6,4 +6,6 @@ GTD Task Manager using EJBs and Web Services for Distributed Systems and Interne
 Para poder ejecutarse bien, incluir en _widfly/standalone/deployments_:
 + hsqldb.jar
 + GTD-ds.xml
+
+
 _Ambos se incluyen en la carpeta Resources._
