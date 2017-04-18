@@ -1,5 +1,6 @@
 package com.sdi.business.impl.user;
 
+
 import javax.ejb.Stateless;
 
 import com.sdi.business.exception.BusinessException;
@@ -31,5 +32,7 @@ public class EjbUserService implements UserService,RemoteUserService, LocalUserS
 		
 		return new FindLoggableUSerCommand<User>(login, password).execute();
 	}
+
+	
 
 }

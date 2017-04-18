@@ -24,24 +24,15 @@ public class Jdbc {
 	private static final String QUERIES_PROPERTIES_FILE = "sql_queries.properties";
 	private static final String PERSISTANCE_PROPERTIES_FILE = "persistance.properties";
 	
-	private static final String DATABASE_URL;
-	private static final String DATABASE_USER;
-	private static final String DATABASE_PASSWORD;
-	private static final String DATABASE_DRIVER;
 	
 	private static Properties sqlQueries;
 	private static Properties persistanceConfig;
 	private static DataSource dataSource;
 	
 	static {
-		Properties dbConfig = loadProperties( DATABASE_PROPERTIES_FILE );
 		sqlQueries = loadProperties( QUERIES_PROPERTIES_FILE );
 		persistanceConfig = loadProperties(PERSISTANCE_PROPERTIES_FILE);
 		
-		DATABASE_URL = dbConfig.getProperty( "DATABASE_URL" );
-		DATABASE_USER = dbConfig.getProperty( "DATABASE_USER" );
-		DATABASE_PASSWORD = dbConfig.getProperty( "DATABASE_PASSWORD" );
-		DATABASE_DRIVER = dbConfig.getProperty( "DATABASE_DRIVER" ); 
 	
 		dataSource = loadDataSource();
 	}

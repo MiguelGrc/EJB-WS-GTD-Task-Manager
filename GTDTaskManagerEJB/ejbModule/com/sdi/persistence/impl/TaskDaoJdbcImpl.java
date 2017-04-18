@@ -163,4 +163,29 @@ public class TaskDaoJdbcImpl implements TaskDao {
 		
 	}
 
+	//Nuevas funciones para nuevo servicio
+	@Override
+	public int countCompleatedTasksByUserId(Long userId) {
+		return jdbcTemplate.executeAggregate("TASK_COUNT_FINISHED_BY_USER_ID",
+											userId);
+	}
+
+	@Override
+	public int countCompleatedAndDelayedTasksByUserId(Long userId) {
+		return jdbcTemplate.executeAggregate("TASK_COUNT_FINISHED_AND_DELAYED_BY_USER_ID",
+				userId);
+	}
+
+	@Override
+	public int countPlannedTasksByUserId(Long userId) {
+		return jdbcTemplate.executeAggregate("TASK_COUNT_PLANNED_BY_USER_ID",
+				userId);
+	}
+
+	@Override
+	public int countNotPlannedTasksByUserId(Long userId) {
+		return jdbcTemplate.executeAggregate("TASK_COUNT_NOT_PLANNED_BY_USER_ID",
+				userId);
+	}
+
 }

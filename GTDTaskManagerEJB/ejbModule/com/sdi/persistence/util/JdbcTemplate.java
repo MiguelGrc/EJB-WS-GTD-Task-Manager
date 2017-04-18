@@ -54,6 +54,34 @@ public class JdbcTemplate {
 			Jdbc.close( ps, con );
 		}
 	}
+	
+	/**
+	 * Template method to execute MIN, SUM, AVG, COUNT statements.
+	 * 
+	 * @param queryKey, Key for the query in the properties file
+	 * @param args, arguments to the JDBC query
+	 * @return the result of the aggregate function
+	 */
+	public int executeAggregate(String queryKey, Object... args) {
+		String sql = Jdbc.getSqlQuery(queryKey);
+
+		Connection con = null;
+		PreparedStatement ps =  null;
+		ResultSet rs = null;
+		try {
+			con = Jdbc.getCurrentConnection();
+			ps = con.prepareStatement(sql);
+			bindSqlParameters(args, ps);
+			rs = ps.executeQuery();
+
+			return rs.next() ? rs.getInt(1) : null;
+
+		} catch (SQLException e) {
+			throw new PersistenceException(e);
+		} finally {
+			Jdbc.close( rs, ps, con );
+		}
+	}
 
 	/**
 	 * Template method to execute a SELECT returning a single object

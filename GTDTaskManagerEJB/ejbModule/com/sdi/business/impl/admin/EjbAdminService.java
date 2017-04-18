@@ -8,9 +8,11 @@ import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.admin.command.DeepDeleteUserCommand;
 import com.sdi.business.impl.admin.command.DisableUserCommand;
 import com.sdi.business.impl.admin.command.EnableUserCommand;
+import com.sdi.business.impl.admin.command.FindAllUsersInfo;
 import com.sdi.business.impl.command.Command;
 import com.sdi.business.services.AdminService;
 import com.sdi.dto.User;
+import com.sdi.dto.UserInfo;
 import com.sdi.persistence.Persistence;
 
 /**
@@ -50,6 +52,11 @@ public class EjbAdminService implements AdminService,RemoteAdminService, LocalAd
 				return Persistence.getUserDao().findById(id);
 			}
 		}.execute();
+	}
+	
+	@Override
+	public List<UserInfo> findAllUsersInfo() throws BusinessException {
+		return new FindAllUsersInfo().execute();
 	}
 
 }
