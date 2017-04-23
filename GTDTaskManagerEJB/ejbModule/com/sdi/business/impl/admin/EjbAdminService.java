@@ -3,6 +3,7 @@ package com.sdi.business.impl.admin;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.admin.command.DeepDeleteUserCommand;
@@ -19,6 +20,7 @@ import com.sdi.persistence.Persistence;
  * Session Bean implementation class EjbAdminService
  */
 @Stateless
+@WebService(name="AdminService")
 public class EjbAdminService implements AdminService,RemoteAdminService, LocalAdminService {
 
 	@Override

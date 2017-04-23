@@ -3,6 +3,7 @@ package com.sdi.business.impl.task;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.command.Command;
@@ -22,6 +23,7 @@ import com.sdi.persistence.Persistence;
  * Session Bean implementation class EjbTaskService
  */
 @Stateless
+@WebService(name="TaskService")
 public class EjbTaskService implements TaskService,RemoteTaskService, LocalTaskService {
 
 	@Override
