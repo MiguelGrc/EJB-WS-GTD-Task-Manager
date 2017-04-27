@@ -44,6 +44,26 @@ public class UserInfo implements Serializable{
 		return numTareasNoPlanificadas;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setNumTareasCompletadas(int numTareasCompletadas) {
+		this.numTareasCompletadas = numTareasCompletadas;
+	}
+
+	public void setNumTareasCompletadasRetrasadas(int numTareasCompletadasRetrasadas) {
+		this.numTareasCompletadasRetrasadas = numTareasCompletadasRetrasadas;
+	}
+
+	public void setNumTareasPlanificadas(int numTareasPlanificadas) {
+		this.numTareasPlanificadas = numTareasPlanificadas;
+	}
+
+	public void setNumTareasNoPlanificadas(int numTareasNoPlanificadas) {
+		this.numTareasNoPlanificadas = numTareasNoPlanificadas;
+	}
+
 	
 	
 	 

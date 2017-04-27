@@ -32,7 +32,6 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 			"ERROR INTERNO DEL SERVIDOR", 500, new Headers<Object>());
 	private static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse(
 			"Nadie puede acceder a este recurso", 403, new Headers<Object>());
-	//TODO Internacionalizar???
 	
 	
 	@Override
