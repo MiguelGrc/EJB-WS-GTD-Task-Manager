@@ -7,6 +7,7 @@ import alb.util.menu.Action;
 import com.sdi.ws.admin.AdminService;
 import com.sdi.ws.admin.EjbAdminServiceService;
 import com.sdi.ws.admin.UserInfo;
+import com.sdi.ws.admin.UserStatus;
 
 public class ListarUsuariosAction implements Action{
 
@@ -46,16 +47,16 @@ public class ListarUsuariosAction implements Action{
 		for(UserInfo userInf : users){
 			StringBuilder sb = new StringBuilder();
 			
-//			sb.append(userInf.getUser().getId() +" \t");
-//			sb.append(userInf.getUser().getLogin()+"   \t");
-//			sb.append(userInf.getUser().getEmail()+"  \t");
-//			sb.append((userInf.getUser().getIsAdmin()? "yes" : "no") + "    \t \t");
-//			sb.append((userInf.getUser().getStatus() == UserStatus.ENABLED ? "ENABLED" : "DISABLED") + " \t");
-//			sb.append(userInf.getNumTareasCompletadas() + "   \t \t");
-//			sb.append(userInf.getNumTareasCompletadasRetrasadas() + "      \t \t \t");
-//			sb.append(userInf.getNumTareasPlanificadas() + "       \t \t");
-//			sb.append(userInf.getNumTareasNoPlanificadas() + "      \t \t");
-//			sb.append("\n");
+			sb.append(userInf.getUser().getId() +" \t");
+			sb.append(userInf.getUser().getLogin()+"   \t");
+			sb.append(userInf.getUser().getEmail()+"  \t");
+			sb.append((userInf.getUser().isIsAdmin()? "yes" : "no") + "    \t \t");
+			sb.append((userInf.getUser().getStatus() == UserStatus.ENABLED ? "ENABLED" : "DISABLED") + " \t");
+			sb.append(userInf.getNumTareasCompletadas() + "   \t \t");
+			sb.append(userInf.getNumTareasCompletadasRetrasadas() + "      \t \t \t");
+			sb.append(userInf.getNumTareasPlanificadas() + "       \t \t");
+			sb.append(userInf.getNumTareasNoPlanificadas() + "      \t \t");
+			sb.append("\n");
 			
 			System.out.print(sb.toString());
 		}

@@ -15,7 +15,7 @@ public class TaskServiceRestImpl implements TaskServiceRest {
 	@Override
 	public List<Category> findCategoriesByUserId()
 			throws BusinessException {
-		return service.findCategoriesByUserId(269L);	//TODO placeholder
+		return service.findCategoriesByUserId(272L);	//TODO placeholder
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -25,15 +26,15 @@ public interface TaskServiceRest {
 	@GET
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public List<Task> findTasksByCategoryId(Long catId) throws BusinessException;
+	public List<Task> findTasksByCategoryId(@PathParam("id") Long catId) throws BusinessException;
 	//TODO Suponiendo que se pidan este tipo de tareas ^
 	
 	@POST 
 	@Path("{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public void markTaskAsFinished(Long id) throws BusinessException;
+	public void markTaskAsFinished(@PathParam("id") Long id) throws BusinessException;
 	
-	@PUT 
+	@PUT
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Long createTask(Task task) throws BusinessException;
 	
