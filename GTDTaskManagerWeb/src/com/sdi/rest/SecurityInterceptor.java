@@ -40,7 +40,7 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 				requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
 		Method method = methodInvoker.getMethod();
 		
-		//No hace nada de momento, porque no estamos usando ninguna anotación del estilo
+		//No hace nada de momento, porque no estamos usando ninguna anotación del estilo	//TODO remove
 		if(method.isAnnotationPresent(PermitAll.class)){
 			requestContext.abortWith(ACCESS_FORBIDDEN);
 			return;
@@ -81,9 +81,13 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 		User user = null;
 		try {
 			user = service.findLoggableUser(login, password);
+			
+			ClientInfo.setInformation(user);
+			
 		} catch (BusinessException e) {
 			Log.error(e);	//TODO check
 		}
+		
 		return (user != null && user.getStatus().equals(UserStatus.ENABLED));
 	}
 	

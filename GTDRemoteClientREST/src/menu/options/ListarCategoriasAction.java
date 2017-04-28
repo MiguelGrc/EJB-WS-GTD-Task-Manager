@@ -4,57 +4,38 @@ import java.util.List;
 
 import alb.util.menu.Action;
 
+import com.sdi.client.Category;
+import com.sdi.client.RestServiceFactory;
+
 public class ListarCategoriasAction implements Action {
 
 	@Override
 	public void execute() throws Exception {
 		
-		AdminService service = new EjbAdminServiceService().getAdminServicePort();
-		
-		List<UserInfo> usersInfo = service.findAllUsersInfo();		
+		List<Category> catList = RestServiceFactory.getClient().findCategoriesByUserId();
 		
 		printHeader();
-		printUsers(usersInfo);
+		printCategories(catList);
 		
 		System.out.print("------------------------------------------------------");
 		
 	}
 
 	private void printHeader() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("ID \t");
-		sb.append("Login   \t");
-		sb.append("Email            \t");
-		//TODO:La contraseña no deberia mostarse al Administrador
-		sb.append("IsAdmin  \t");
-		sb.append("Status  \t");
-		sb.append("numTarCompl \t");
-		sb.append("numTarComplRetrasadas \t");
-		sb.append("numTarPlanificadas \t");
-		sb.append("numTarNoPlanificadas \t");
-		sb.append("\n");
-		
-		System.out.print(sb.toString());
+		System.out.printf("%s %s\n",
+				"_ID____",
+				"_NOMBRE_____________"
+			);
 	}
 
-	private void printUsers(List<UserInfo> users) {
-		
-		for(UserInfo userInf : users){
-			StringBuilder sb = new StringBuilder();
-			
-			sb.append(userInf.getUser().getId() +" \t");
-			sb.append(userInf.getUser().getLogin()+"   \t");
-			sb.append(userInf.getUser().getEmail()+"  \t");
-			sb.append((userInf.getUser().isIsAdmin()? "yes" : "no") + "    \t \t");
-			sb.append((userInf.getUser().getStatus() == UserStatus.ENABLED ? "ENABLED" : "DISABLED") + " \t");
-			sb.append(userInf.getNumTareasCompletadas() + "   \t \t");
-			sb.append(userInf.getNumTareasCompletadasRetrasadas() + "      \t \t \t");
-			sb.append(userInf.getNumTareasPlanificadas() + "       \t \t");
-			sb.append(userInf.getNumTareasNoPlanificadas() + "      \t \t");
-			sb.append("\n");
-			
-			System.out.print(sb.toString());
+	private void printCategories(List<Category> catList) {
+		for(Category cat : catList){
+			System.out.printf("%-7d %-20s\n",
+					cat.getId(),
+					cat.getName()
+				);
 		}
+	}
 		
 	
 }
