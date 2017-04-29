@@ -15,7 +15,7 @@ public class TaskServiceRestImpl implements TaskServiceRest {
 	@Override
 	public List<Category> findCategoriesByUserId()
 			throws BusinessException {
-		return service.findCategoriesByUserId(272L);	//TODO placeholder
+		return service.findCategoriesByUserId(ClientInfo.id);	//TODO placeholder
 	}
 
 	@Override
@@ -30,8 +30,9 @@ public class TaskServiceRestImpl implements TaskServiceRest {
 	}
 
 	@Override
-	public Long createTask(Task task) throws BusinessException {
-		return service.createTask(task);
+	public void createTask(Task task) throws BusinessException {
+		task.setUserId(ClientInfo.id);
+		service.createTask(task);
 	}
 
 	

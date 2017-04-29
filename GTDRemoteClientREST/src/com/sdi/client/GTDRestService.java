@@ -32,6 +32,6 @@ public interface GTDRestService {
 	
 	@PUT
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Long createTask(Task task);
+	public void createTask(Task task);
 
 }

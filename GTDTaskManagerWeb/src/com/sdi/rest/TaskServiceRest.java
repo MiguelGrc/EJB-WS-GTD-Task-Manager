@@ -36,6 +36,7 @@ public interface TaskServiceRest {
 	
 	@PUT
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Long createTask(Task task) throws BusinessException;
+	public void createTask(Task task) throws BusinessException;			//TODO: hice esto void para evitar problemas de RestEasy 
+																			//con el return (que ni siquiera necesitamos)
 	
 }
