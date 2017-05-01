@@ -80,15 +80,16 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 		UserService service = BusinessFactory.businessService.getUserService();
 		User user = null;
 		try {
-			user = service.findLoggableUser(login, password);
-			
-			ClientInfo.setInformation(user);
-			
+			user = service.findLoggableUser(login, password);			
 		} catch (BusinessException e) {
 			Log.error(e);	//TODO check
 		}
 		
-		return (user != null && user.getStatus().equals(UserStatus.ENABLED));
+		if(user != null && user.getStatus().equals(UserStatus.ENABLED)){
+			ClientInfo.setInformation(user);
+			return true;
+		}
+		return false;
 	}
 	
 }

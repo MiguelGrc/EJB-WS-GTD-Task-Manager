@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear tarea"
+            android:textSize="30sp"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="500px"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/createTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Introduzca el título"
+            android:gravity="center_horizontal"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/createComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Introduzca un comentario"
+            android:gravity="center_horizontal"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/createPlanned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Seleccione la fecha planeada"
+            android:gravity="center_horizontal"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/createCatId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Introduzca la categoría a la que asociarla"
+            android:gravity="center_horizontal"
+            android:inputType="number"/>
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear"
+            android:onClick="create" />
+
+    </LinearLayout>
+
+</ScrollView>
