@@ -41,7 +41,7 @@ public partial class EjbAdminServiceService : System.Web.Services.Protocols.Soap
     
     /// <remarks/>
     public EjbAdminServiceService() {
-        this.Url = "http://PCJorge:8280/GTDTaskManagerEJB/AdminService";
+        this.Url = "http://localhost:8280/GTDTaskManagerEJB/AdminService";
     }
     
     /// <remarks/>

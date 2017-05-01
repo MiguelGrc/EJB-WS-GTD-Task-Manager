@@ -1,6 +1,7 @@
 
 package com.sdi.business.integration;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.ejb.ActivationConfigProperty;
 
+import alb.util.date.DateUtil;
+
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.task.LocalTaskService;
 import com.sdi.business.impl.user.LocalUserService;
@@ -34,7 +37,7 @@ import com.sdi.dto.User;
 		activationConfig = {
 				@ActivationConfigProperty(
 						propertyName = "destination",
-						propertyValue = "queue/GTDQueue")
+						propertyValue = "jms/queue/GTDQueue")
 })
 public class GTDListener implements MessageListener {
 	
@@ -56,9 +59,6 @@ public class GTDListener implements MessageListener {
 	private void initialize() throws JMSException{
 		
 		con = factory.createConnection("sdi","password");
-		session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-		con.start();
 	}
 
 	@Override
@@ -80,19 +80,20 @@ public class GTDListener implements MessageListener {
 	}
 
 	private void reply(TextMessage tmsg, Destination destination, Message msg) throws JMSException {
-		MessageProducer replyProducer = session.createProducer(msg.getJMSDestination());
+		MessageProducer replyProducer = session.createProducer(msg.getJMSReplyTo());
 		tmsg.setJMSCorrelationID(msg.getJMSCorrelationID());
 		replyProducer.send(tmsg);
 		
 	}
 
 	private TextMessage process(Message msg) throws JMSException {
-//		if(!messageOfExceptedType(msg)){
-//			System.out.print("Wrong message type.");
-//			return session.createTextMessage("Wrong message type.");
-//		}
-		
-		//TextMessage tm = (TextMessage) msg;
+		session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+		con.start();
+		if(!messageOfExceptedType(msg)){
+			System.out.print("Wrong message type.");
+			return session.createTextMessage("Wrong message type.");
+		}
 		MapMessage m = (MapMessage) msg;
 		
 		String cmd = m.getString("command");
@@ -106,12 +107,14 @@ public class GTDListener implements MessageListener {
 				System.out.println("ITS HEREEE!!!");
 			}
 			else{
-				if(cmd.equals("listTasks"))
-					listTasks(replyMessage, user);
+				if(cmd.equals("listTasks")){
+					System.out.println("Listing");
+					replyMessage = listTasks(replyMessage, user);
+				}
 				else if(cmd.equals("finishTask"))
-					finishTask(m,replyMessage);
+					replyMessage = finishTask(m,replyMessage);
 				 else if(cmd.equals("createTask"))
-					 createTask(m, replyMessage, user);
+					 replyMessage = createTask(m, replyMessage, user);
 				 else
 					 System.out.println("wrong command");
 				 //TODO aqui con else con que el formato está mal
@@ -128,11 +131,13 @@ public class GTDListener implements MessageListener {
 	}
 	
 	
-	private void listTasks(TextMessage replyMessage, User user) throws BusinessException, JMSException {
+	private TextMessage listTasks(TextMessage replyMessage, User user) throws BusinessException, JMSException {
 		List<Task> tasks = taskServ.findTodayTasksByUserId(user.getId());
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
 		StringBuilder sb = new StringBuilder();
-		sb.append("--------------- List of requested Tasks -----------------");
+		sb.append("--------------- List of requested Tasks ----------------- \n");
 		sb.append("ID \t");
 		sb.append("Title \t");
 		sb.append("Created \t");
@@ -142,33 +147,33 @@ public class GTDListener implements MessageListener {
 		for(Task task : tasks){
 			sb.append(task.getId()+" \t");
 			sb.append(task.getTitle()+ "\t");
-			sb.append(task.getCreated()+ "\t");
-			sb.append(task.getPlanned()==null? "Not planned \t" : task.getPlanned()+ "\t" );
-			sb.append(task.getComments()+ "\t");
+			sb.append(sdf.format(task.getCreated())+ "\t");
+			sb.append(task.getPlanned()==null? "Not planned \t" : sdf.format(task.getPlanned())+ "\t" );
+			sb.append(task.getComments()==null? "\t" : task.getComments()+"\t");
+			sb.append("\n");
 		}
 		
 		sb.append("----------------------------------------------------------");
 		
-		replyMessage=session.createTextMessage(sb.toString());
+		return session.createTextMessage(sb.toString());
 	}
 	
-	private void finishTask(MapMessage m, TextMessage replyMessage) throws BusinessException, JMSException {
+	private TextMessage finishTask(MapMessage m, TextMessage replyMessage) throws BusinessException, JMSException {
 		taskServ.markTaskAsFinished(m.getLong("taskId"));
-		replyMessage = session.createTextMessage("La tarea ha sido finalizada correctamente.");
+		return session.createTextMessage("La tarea ha sido finalizada correctamente.");
 		
 	}
 
-	private void createTask(MapMessage m, TextMessage replyMessage, User user) throws JMSException, BusinessException {
+	private TextMessage createTask(MapMessage m, TextMessage replyMessage, User user) throws JMSException, BusinessException {
 		Task task = new Task();
-		Date plannedDate = new Date(m.getInt("diaPlaneado"),m.getInt("mesPlaneado")
-				, m.getInt("añoPlaneado"));
+		Date plannedDate = DateUtil.fromString(m.getString("planned"));
 		task.setTitle(m.getString("titulo")).setComments(m.getString("comentario"))
 		.setPlanned(plannedDate).setCategoryId(m.getLong("categoryID")).setUserId(user.getId());
 		
 		
 		taskServ.createTask(task);
 		
-		replyMessage= session.createTextMessage("La tarea ha sido creada correctamente.");
+		return session.createTextMessage("La tarea ha sido creada correctamente.");
 		
 	}
 
@@ -192,7 +197,6 @@ public class GTDListener implements MessageListener {
 	public void setSession(Session session) {
 		this.session = session;
 	}
-	
 	
 	
 	

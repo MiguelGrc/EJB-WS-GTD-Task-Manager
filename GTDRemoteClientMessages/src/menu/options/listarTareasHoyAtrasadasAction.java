@@ -2,6 +2,7 @@ package menu.options;
 
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
+import javax.jms.Message;
 
 import menu.ClientInfo;
 import alb.util.menu.Action;
