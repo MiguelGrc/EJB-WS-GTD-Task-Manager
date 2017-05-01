@@ -1,6 +1,0 @@
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\bin\Debug\AlternativeSOAPClient.exe.config
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\bin\Debug\AlternativeSOAPClient.exe
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\bin\Debug\AlternativeSOAPClient.pdb
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\obj\Debug\AlternativeSOAPClient.csprojResolveAssemblyReference.cache
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\obj\Debug\AlternativeSOAPClient.exe
-D:\Documentos\Documents\Programs\AlternativeSOAPClient\AlternativeSOAPClient\obj\Debug\AlternativeSOAPClient.pdb

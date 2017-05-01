@@ -14,7 +14,12 @@ namespace AlternativeSOAPClient
             PrintSetOptions();
             while ((option = Convert.ToInt32(Console.ReadLine())) > 0)
             {
-                ExecuteOption(option);
+                try {
+                    ExecuteOption(option);
+                }catch(Exception e)
+                {
+                    Console.WriteLine("Se ha producido un error procesando la petición.");
+                }
                 PrintSetOptions();
 
             }

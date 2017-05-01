@@ -70,8 +70,9 @@ public class GTDListener implements MessageListener {
 			reply(tmsg, msg.getJMSReplyTo(),msg);
 			
 		}
-		catch(JMSException jex){
+		catch(Exception jex){
 			//TODO log the exception
+			jex.printStackTrace();
 			System.out.println("ERROR!!");
 		}
 		
@@ -91,13 +92,15 @@ public class GTDListener implements MessageListener {
 //			return session.createTextMessage("Wrong message type.");
 //		}
 		
+		//TextMessage tm = (TextMessage) msg;
 		MapMessage m = (MapMessage) msg;
 		
 		String cmd = m.getString("command");
 		TextMessage replyMessage = session.createTextMessage();
 		
 		try {
-			User user = userServ.findLoggableUser(m.getString("nameuser"), "password");
+			System.out.print(m.getString("nameuser")+m.getString("password"));
+			User user = userServ.findLoggableUser(m.getString("nameuser"), m.getString("password"));
 			if(user==null){
 				replyMessage = session.createTextMessage("Usuario no válido");
 				System.out.println("ITS HEREEE!!!");

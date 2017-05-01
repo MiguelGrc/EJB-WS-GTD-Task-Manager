@@ -1,0 +1,6 @@
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\bin\Debug\GTDRemoteClientSOAPCSharp.exe.config
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\obj\Debug\GTDRemoteClientSOAPCSharp.csprojResolveAssemblyReference.cache
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\bin\Debug\GTDRemoteClientSOAPCSharp.exe
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\bin\Debug\GTDRemoteClientSOAPCSharp.pdb
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\obj\Debug\GTDRemoteClientSOAPCSharp.exe
+D:\Documentos\Documents\Programs\GTDRemoteClientSOAPCSharp\GTDRemoteClientSOAPCSharp\obj\Debug\GTDRemoteClientSOAPCSharp.pdb
