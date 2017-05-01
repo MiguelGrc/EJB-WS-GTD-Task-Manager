@@ -8,10 +8,6 @@ import android.widget.EditText;
 
 import com.loopj.android.http.RequestParams;
 
-/**
- * Created by MIGUEL on 30/04/2017.
- */
-
 public class LoginActivity extends AppCompatActivity {
 
     @Override

@@ -12,10 +12,6 @@ import com.sdi.client.dto.Task;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-/**
- * Created by MIGUEL on 01/05/2017.
- */
-
 public class TasksActivity extends AppCompatActivity {
 
     TableLayout tableLayout;

@@ -15,9 +15,6 @@ import java.util.Date;
 
 import alb.util.date.DateUtil;
 
-/**
- * Created by MIGUEL on 01/05/2017.
- */
 
 public class CreateTaskActivity extends AppCompatActivity {
 
