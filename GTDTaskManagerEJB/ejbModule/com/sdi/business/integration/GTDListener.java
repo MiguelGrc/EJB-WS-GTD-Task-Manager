@@ -15,7 +15,6 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
@@ -43,8 +42,8 @@ public class GTDListener implements MessageListener {
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
 	private ConnectionFactory factory;
-//	@Resource(mappedName = "java:/queue/GTDQueue")
-//	private Destination requestQueue;
+	@Resource(mappedName = "java:/jms/queue/ErrorQueue")
+	private Destination errorQueue;
 	
 	@EJB(beanInterface = LocalUserService.class)
 	private UserService userServ;
@@ -54,9 +53,10 @@ public class GTDListener implements MessageListener {
 	
 	private Connection con;
 	private Session session;
+	private MessageProducer errorSender;
 	
 	@PostConstruct
-	private void initialize() throws JMSException{
+	private void postConst() throws JMSException{
 		
 		con = factory.createConnection("sdi","password");
 	}
@@ -70,9 +70,10 @@ public class GTDListener implements MessageListener {
 			reply(tmsg, msg.getJMSReplyTo(),msg);
 			
 		}
-		catch(Exception jex){
+		catch(JMSException jex){
 			//TODO log the exception
 			jex.printStackTrace();
+			//createIncidence("Ha ocurrido un error procesando la petición", "Se produjo un error tipo JMSException");
 			System.out.println("ERROR!!");
 		}
 		
@@ -87,12 +88,12 @@ public class GTDListener implements MessageListener {
 	}
 
 	private TextMessage process(Message msg) throws JMSException {
-		session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-		con.start();
+		
+		initialize();
+		
 		if(!messageOfExceptedType(msg)){
 			System.out.print("Wrong message type.");
-			return session.createTextMessage("Wrong message type.");
+			return createIncidence("Wrong Message Type");
 		}
 		MapMessage m = (MapMessage) msg;
 		
@@ -103,7 +104,8 @@ public class GTDListener implements MessageListener {
 			System.out.print(m.getString("nameuser")+m.getString("password"));
 			User user = userServ.findLoggableUser(m.getString("nameuser"), m.getString("password"));
 			if(user==null){
-				replyMessage = session.createTextMessage("Usuario no válido");
+				replyMessage = createIncidence("El usuario no existe o está deshabilitado",
+						"Usuario con login: " + m.getString("nameuser") + "ha intentado acceder a los servicios" );
 				System.out.println("ITS HEREEE!!!");
 			}
 			else{
@@ -116,12 +118,12 @@ public class GTDListener implements MessageListener {
 				 else if(cmd.equals("createTask"))
 					 replyMessage = createTask(m, replyMessage, user);
 				 else
-					 System.out.println("wrong command");
+					 replyMessage = createIncidence("Command error", "Command error: " + cmd);
 				 //TODO aqui con else con que el formato está mal
 			}
 		} catch (BusinessException e) {
 			e.printStackTrace();
-			replyMessage = session.createTextMessage("Se ha producido un error procesando la petición"); 
+			replyMessage = createIncidence("Se ha producido un error procesando la petición", "Se ha producido un BusinessException");
 			
 		}
 		
@@ -166,7 +168,14 @@ public class GTDListener implements MessageListener {
 
 	private TextMessage createTask(MapMessage m, TextMessage replyMessage, User user) throws JMSException, BusinessException {
 		Task task = new Task();
-		Date plannedDate = DateUtil.fromString(m.getString("planned"));
+		Date plannedDate = null;
+		try{
+		plannedDate = DateUtil.fromString(m.getString("planned"));
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+		}
+		if(plannedDate==null)
+			return createIncidence("Wrong Date format");
 		task.setTitle(m.getString("titulo")).setComments(m.getString("comentario"))
 		.setPlanned(plannedDate).setCategoryId(m.getLong("categoryID")).setUserId(user.getId());
 		
@@ -198,7 +207,33 @@ public class GTDListener implements MessageListener {
 		this.session = session;
 	}
 	
+	private void initialize() throws JMSException{
+		session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		con.start();
+		
+		errorSender = session.createProducer(errorQueue);
+	}
 	
+	private TextMessage createIncidence(String content) throws JMSException{
+		TextMessage tmsg = session.createTextMessage(content +".");
+		
+		Date currentDate = new Date();
+		
+		TextMessage tsmgError = session.createTextMessage(content+ "\t" + currentDate);
+		errorSender.send(tsmgError);
+		return tmsg;
+	}
+	
+	private TextMessage createIncidence(String contentUser, String contentAdmin) throws JMSException{
+		
+		
+		Date currentDate = new Date();
+		
+		TextMessage tsmgError = session.createTextMessage(contentAdmin+ "\t" + currentDate);
+		errorSender.send(tsmgError);
+		TextMessage tmsg = session.createTextMessage(contentUser+".");
+		return tmsg;
+	}
 	
 
 }
