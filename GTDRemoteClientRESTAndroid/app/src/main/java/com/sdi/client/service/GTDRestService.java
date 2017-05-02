@@ -19,8 +19,7 @@ public interface GTDRestService {
     //TODO Param (id) removed for the moment
 
     @GET("TaskServiceRs/{id}")
-    Call<List<Task>> findTasksByCategoryId(@Path("id") Long catId);
-    //TODO Suponiendo que se pidan este tipo de tareas ^
+    Call<List<Task>> findDelayedTasksByCategoryId(@Path("id") Long catId);
 
     @POST("TaskServiceRs/{id}")
     Call<Void>markTaskAsFinished(@Path("id") Long id);

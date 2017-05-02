@@ -162,6 +162,17 @@ public class TaskDaoJdbcImpl implements TaskDao {
 			);
 		
 	}
+	
+	@Override
+	public List<Task> findDelayedTasksByCategoryId(Long catId) {	//\Custom
+		return jdbcTemplate.queryForList(
+				"TASK_FIND_DELAYED_BY_CATEGORY", 
+				new TaskDtoMapper(),
+				catId
+			);
+		
+	}
+	
 
 	//Nuevas funciones para nuevo servicio
 	@Override

@@ -19,9 +19,9 @@ public class TaskServiceRestImpl implements TaskServiceRest {
 	}
 
 	@Override
-	public List<Task> findTasksByCategoryId(Long catId)
+	public List<Task> findDelayedTasksByCategoryId(Long catId)
 			throws BusinessException {
-		return service.findTasksByCategoryId(catId);
+		return service.findDelayedTasksByCategoryId(catId);
 	}
 
 	@Override

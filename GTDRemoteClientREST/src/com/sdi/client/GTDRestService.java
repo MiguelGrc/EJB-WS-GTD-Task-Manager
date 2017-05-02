@@ -22,8 +22,7 @@ public interface GTDRestService {
 	@GET
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public List<Task> findTasksByCategoryId(@PathParam("id") Long catId);
-	//TODO Suponiendo que se pidan este tipo de tareas ^
+	public List<Task> findDelayedTasksByCategoryId(@PathParam("id") Long catId);
 	
 	@POST 
 	@Path("{id}")

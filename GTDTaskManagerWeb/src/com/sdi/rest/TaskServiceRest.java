@@ -26,8 +26,7 @@ public interface TaskServiceRest {
 	@GET
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public List<Task> findTasksByCategoryId(@PathParam("id") Long catId) throws BusinessException;
-	//TODO Suponiendo que se pidan este tipo de tareas ^
+	public List<Task> findDelayedTasksByCategoryId(@PathParam("id") Long catId) throws BusinessException;
 	
 	@POST 
 	@Path("{id}")

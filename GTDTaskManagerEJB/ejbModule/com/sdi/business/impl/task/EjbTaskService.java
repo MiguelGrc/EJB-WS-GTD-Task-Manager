@@ -161,5 +161,15 @@ public class EjbTaskService implements TaskService,RemoteTaskService, LocalTaskS
 			}
 		}.execute();
 	}
+	
+	@Override
+	public List<Task> findDelayedTasksByCategoryId(final Long catId) throws BusinessException {
+		return new Command<List<Task>>() {
+			@Override public List<Task> execute() throws BusinessException {
+				
+				return Persistence.getTaskDao().findDelayedTasksByCategoryId(catId);
+			}
+		}.execute();
+	}
 
 }

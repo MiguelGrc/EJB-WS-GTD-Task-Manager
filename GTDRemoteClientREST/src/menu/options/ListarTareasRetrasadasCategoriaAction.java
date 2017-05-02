@@ -10,14 +10,14 @@ import com.sdi.client.PlannedTaskComparator;
 import com.sdi.client.RestServiceFactory;
 import com.sdi.client.Task;
 
-public class ListarTareasCategoriaAction implements Action {
+public class ListarTareasRetrasadasCategoriaAction implements Action {
 
 	@Override
 	public void execute() throws Exception {
 		
 		Long catId = Console.readLong("ID de la categoría");
 		
-		List<Task> taskList = RestServiceFactory.getClient().findTasksByCategoryId(catId);
+		List<Task> taskList = RestServiceFactory.getClient().findDelayedTasksByCategoryId(catId);
 	
 		//Ordenamos las tareas de fecha planeda más antigua a más reciente
 		Collections.sort(taskList, new PlannedTaskComparator());

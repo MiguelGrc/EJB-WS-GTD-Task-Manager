@@ -67,6 +67,12 @@ public interface TaskDao extends GenericDao<Task, Long> {
 	 */
 	List<Task> findFinishedTasksInboxByUserId(Long userId);
 	
+	/**
+	 * @param catId
+	 * @return All delayed tasks in a category
+	 */
+	List<Task> findDelayedTasksByCategoryId(Long catId);	//\Custom
+	
 	//Métodos agregados para nuevo servicio
 	
 	/**

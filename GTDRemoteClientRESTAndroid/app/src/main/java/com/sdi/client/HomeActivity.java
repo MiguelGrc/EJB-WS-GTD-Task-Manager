@@ -125,7 +125,7 @@ public class HomeActivity extends AppCompatActivity {
     //Al pulsar el botón de mostrar tareas
     public void showTasks(View view){
         EditText cat = (EditText) findViewById(R.id.cat);
-        Call<List<Task>> call = client.findTasksByCategoryId(Long.parseLong(cat.getText().toString()));
+        Call<List<Task>> call = client.findDelayedTasksByCategoryId(Long.parseLong(cat.getText().toString()));
         call.enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
