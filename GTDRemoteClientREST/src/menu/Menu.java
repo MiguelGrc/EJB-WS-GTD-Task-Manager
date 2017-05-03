@@ -1,7 +1,5 @@
 package menu;
 
-import javax.ws.rs.NotAuthorizedException;
-
 import menu.options.CrearTareaAction;
 import menu.options.ListarCategoriasAction;
 import menu.options.ListarTareasRetrasadasCategoriaAction;

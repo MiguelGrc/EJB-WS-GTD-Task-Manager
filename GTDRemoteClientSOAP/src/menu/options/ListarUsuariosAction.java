@@ -30,7 +30,6 @@ public class ListarUsuariosAction implements Action{
 		sb.append("ID \t");
 		sb.append("Login   \t");
 		sb.append("Email            \t");
-		//TODO:La contraseña no deberia mostarse al Administrador
 		sb.append("IsAdmin  \t");
 		sb.append("Status  \t");
 		sb.append("numTarCompl \t");

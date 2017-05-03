@@ -118,7 +118,6 @@ public class GTDListener implements MessageListener {
 					 replyMessage = createTask(m, replyMessage, user);
 				 else
 					 replyMessage = createIncidence("Command error", "Command error: " + cmd);
-				 //TODO aqui con else con que el formato está mal
 			}
 		} catch (BusinessException e) {
 			e.printStackTrace();

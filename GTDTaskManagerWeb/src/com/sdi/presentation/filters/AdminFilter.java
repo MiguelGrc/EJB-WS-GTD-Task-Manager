@@ -31,14 +31,14 @@ public class AdminFilter implements Filter {
 	 * Default constructor.
 	 */
 	public AdminFilter() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
 	 * @see Filter#destroy()
 	 */
 	public void destroy() {
-		// TODO Auto-generated method stub
+		
 	}
 
 	/**

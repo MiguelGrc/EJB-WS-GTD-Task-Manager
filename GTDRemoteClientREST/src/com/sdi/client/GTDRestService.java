@@ -17,7 +17,6 @@ public interface GTDRestService {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<Category> findCategoriesByUserId();
-	//TODO Param (id) removed for the moment
 	
 	@GET
 	@Path("{id}")

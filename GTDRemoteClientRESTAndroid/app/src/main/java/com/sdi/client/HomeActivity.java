@@ -78,7 +78,8 @@ public class HomeActivity extends AppCompatActivity {
 
         //No podemos acceder directamente a localhost desde el emulador. Debemos hacerlo al host con 10.0.2.2
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8280/GTDTaskManagerWeb/rest/")    //A la hora de compilar a APK, cambiar la IP de 10.0.2.2 a la del PC
+                .baseUrl("http://10.0.2.2:8280/GTDTaskManagerWeb/rest/")   //A la hora de compilar a APK, cambiar la IP de 10.0.2.2 a la del PC
+                                                                        //o gtdjorgemiguel.zapto.org
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient)
                 .build();
@@ -125,6 +126,8 @@ public class HomeActivity extends AppCompatActivity {
     //Al pulsar el botón de mostrar tareas
     public void showTasks(View view){
         EditText cat = (EditText) findViewById(R.id.cat);
+        if(cat.getText() == null || cat.getText().toString().isEmpty())
+            return;
         Call<List<Task>> call = client.findDelayedTasksByCategoryId(Long.parseLong(cat.getText().toString()));
         call.enqueue(new Callback<List<Task>>() {
             @Override
@@ -151,6 +154,8 @@ public class HomeActivity extends AppCompatActivity {
     //Al pulsar el botón de marcar como finalizada
     public void markAsFinished(View view){
         EditText task = (EditText) findViewById(R.id.task);
+        if(task.getText() == null || task.getText().toString().isEmpty())
+            return;
         Call<Void> call = client.markTaskAsFinished(Long.parseLong(task.getText().toString()));
         call.enqueue(new Callback<Void>() {
             @Override

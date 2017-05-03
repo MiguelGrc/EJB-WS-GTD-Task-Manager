@@ -21,7 +21,6 @@ public interface TaskServiceRest {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<Category> findCategoriesByUserId() throws BusinessException;
-	//TODO Param (id) removed for the moment
 	
 	@GET
 	@Path("{id}")
@@ -35,7 +34,6 @@ public interface TaskServiceRest {
 	
 	@PUT
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public void createTask(Task task) throws BusinessException;			//TODO: hice esto void para evitar problemas de RestEasy 
-																			//con el return (que ni siquiera necesitamos)
+	public void createTask(Task task) throws BusinessException;
 	
 }
