@@ -1,17 +1,14 @@
 package com.sdi.rest;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.annotation.security.PermitAll;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.core.Headers;
-import org.jboss.resteasy.core.ResourceMethodInvoker;
 import org.jboss.resteasy.core.ServerResponse;
 import org.jboss.resteasy.util.Base64;
 
@@ -28,23 +25,11 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 
 	private static final ServerResponse ACCESS_DENIED = new ServerResponse(
 			"Acceso no permitido a este recurso", 401, new Headers<Object>());
-	private static final ServerResponse SERVER_ERROR = new ServerResponse(
-			"ERROR INTERNO DEL SERVIDOR", 500, new Headers<Object>());
-	private static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse(
-			"Nadie puede acceder a este recurso", 403, new Headers<Object>());
 	
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker)
-				requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
-		Method method = methodInvoker.getMethod();
-		
-		//No hace nada de momento, porque no estamos usando ninguna anotación del estilo	//TODO remove
-		if(method.isAnnotationPresent(PermitAll.class)){
-			requestContext.abortWith(ACCESS_FORBIDDEN);
-			return;
-		}
+		Log.debug("[REST] Petición recibida");
 		
 		MultivaluedMap<String, String> headers = requestContext.getHeaders();
 		List<String> authorization = headers.get("Authorization");
@@ -60,7 +45,7 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 		try {
 			loginAndPass = new String(Base64.decode(encodedLoginAndPass));
 		} catch (IOException e) {
-			requestContext.abortWith(SERVER_ERROR);
+			requestContext.abortWith(ACCESS_DENIED);
 			return;
 		}
 		
@@ -82,11 +67,12 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
 		try {
 			user = service.findLoggableUser(login, password);			
 		} catch (BusinessException e) {
-			Log.error(e);	//TODO check
+			Log.error(e);
 		}
 		
 		if(user != null && user.getStatus().equals(UserStatus.ENABLED)){
 			ClientInfo.setInformation(user);
+			Log.debug("[REST] Usuario identificado correctamente");
 			return true;
 		}
 		return false;

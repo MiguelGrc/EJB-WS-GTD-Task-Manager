@@ -15,12 +15,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
-
 import com.sdi.persistence.PersistenceException;
 
 public class Jdbc {
-	private static final String DATABASE_PROPERTIES_FILE = "database.properties";
 	private static final String QUERIES_PROPERTIES_FILE = "sql_queries.properties";
 	private static final String PERSISTANCE_PROPERTIES_FILE = "persistance.properties";
 	
@@ -36,15 +33,6 @@ public class Jdbc {
 	
 		dataSource = loadDataSource();
 	}
-
-//	private static DataSource configureDataSource(Properties dbConfig) {
-//		BasicDataSource ds = new BasicDataSource();
-//		ds.setDriverClassName( DATABASE_DRIVER );
-//		ds.setUsername( DATABASE_USER );
-//		ds.setPassword( DATABASE_PASSWORD );
-//		ds.setUrl( DATABASE_URL );
-//		return ds;
-//	}
 
 	private static ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
 

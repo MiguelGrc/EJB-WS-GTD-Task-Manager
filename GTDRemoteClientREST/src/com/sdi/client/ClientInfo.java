@@ -7,8 +7,10 @@ public class ClientInfo {
 	public static String password;
 	
 	public static void saveClientInformation(){
-		name = Console.readString("User");
-		password = Console.readString("Password");
-		
+		while(name == null || name.isEmpty())
+			name = Console.readString("User");
+		while(password == null || password.isEmpty())
+			password = Console.readString("Password");
 	}
+	
 }

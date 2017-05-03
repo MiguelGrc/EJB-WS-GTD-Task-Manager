@@ -1,7 +1,5 @@
 package com.sdi.persistence;
 
-import java.util.List;
-
 import com.sdi.dto.User;
 import com.sdi.persistence.util.GenericDao;
 

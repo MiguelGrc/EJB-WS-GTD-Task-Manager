@@ -22,6 +22,7 @@ import javax.jms.TextMessage;
 import javax.ejb.ActivationConfigProperty;
 
 import alb.util.date.DateUtil;
+import alb.util.log.Log;
 
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.task.LocalTaskService;
@@ -63,7 +64,6 @@ public class GTDListener implements MessageListener {
 
 	@Override
 	public void onMessage(Message msg) {
-		System.out.println("GOTCHA!!");
 		try{
 			System.out.println(msg);
 			TextMessage tmsg = process(msg);
@@ -71,10 +71,11 @@ public class GTDListener implements MessageListener {
 			
 		}
 		catch(JMSException jex){
-			//TODO log the exception
 			jex.printStackTrace();
-			//createIncidence("Ha ocurrido un error procesando la petición", "Se produjo un error tipo JMSException");
-			System.out.println("ERROR!!");
+			Log.error("JMS error");
+		}
+		catch (Exception e){
+			e.printStackTrace();
 		}
 		
 		
@@ -92,7 +93,7 @@ public class GTDListener implements MessageListener {
 		initialize();
 		
 		if(!messageOfExceptedType(msg)){
-			System.out.print("Wrong message type.");
+			Log.error("Wrong message type.");
 			return createIncidence("Wrong Message Type");
 		}
 		MapMessage m = (MapMessage) msg;
@@ -101,16 +102,14 @@ public class GTDListener implements MessageListener {
 		TextMessage replyMessage = session.createTextMessage();
 		
 		try {
-			System.out.print(m.getString("nameuser")+m.getString("password"));
 			User user = userServ.findLoggableUser(m.getString("nameuser"), m.getString("password"));
 			if(user==null){
 				replyMessage = createIncidence("El usuario no existe o está deshabilitado",
 						"Usuario con login: " + m.getString("nameuser") + "ha intentado acceder a los servicios" );
-				System.out.println("ITS HEREEE!!!");
 			}
 			else{
+				Log.debug("Message received with command " + cmd);
 				if(cmd.equals("listTasks")){
-					System.out.println("Listing");
 					replyMessage = listTasks(replyMessage, user);
 				}
 				else if(cmd.equals("finishTask"))

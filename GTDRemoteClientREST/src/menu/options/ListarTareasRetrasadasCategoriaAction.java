@@ -3,6 +3,9 @@ package menu.options;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+
 import alb.util.console.Console;
 import alb.util.menu.Action;
 
@@ -17,7 +20,14 @@ public class ListarTareasRetrasadasCategoriaAction implements Action {
 		
 		Long catId = Console.readLong("ID de la categoría");
 		
-		List<Task> taskList = RestServiceFactory.getClient().findDelayedTasksByCategoryId(catId);
+		List<Task> taskList = null;
+		
+		try{
+			 taskList = RestServiceFactory.getClient().findDelayedTasksByCategoryId(catId);
+		} catch (NotAuthorizedException | InternalServerErrorException e){
+			System.err.println("[ERROR] " + e.getMessage().split("\n")[0]);
+			return;
+		}
 	
 		//Ordenamos las tareas de fecha planeda más antigua a más reciente
 		Collections.sort(taskList, new PlannedTaskComparator());

@@ -14,6 +14,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 import util.Jndi;
+import alb.util.log.Log;
 import alb.util.menu.Action;
 
 public abstract class MessageTemplateAction implements Action {
@@ -48,7 +49,6 @@ public abstract class MessageTemplateAction implements Action {
 		msg.setJMSReplyTo(replyQueue);
 		msg.setJMSCorrelationID(createRandomString());
 		sender.send(msg);
-		System.out.println("SENDDDD!");
 	}
 
 
@@ -106,7 +106,7 @@ public abstract class MessageTemplateAction implements Action {
 			process(msg);
 		}
 		else{
-			System.out.print("Message Type Error");
+			Log.error("Message Type Error");
 		}
 	}
 

@@ -2,6 +2,9 @@ package menu.options;
 
 import java.util.Date;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+
 import alb.util.console.Console;
 import alb.util.date.DateUtil;
 import alb.util.menu.Action;
@@ -20,9 +23,6 @@ public class CrearTareaAction implements Action {
 		Date plannedDateFormatted = checkDateFormat(plannedDate);
 		Long categoryID = Console.readLong("ID de la categoría a la que se quiere asociar");
 		
-		System.out.println(plannedDateFormatted.toString());
-		System.out.println(new Date());
-		
 		Task task = new Task();
 		task.setTitle(titulo);
 		task.setComments(comentario);
@@ -30,7 +30,12 @@ public class CrearTareaAction implements Action {
 		task.setCreated(new Date());
 		task.setCategoryId(categoryID);
 		
-		RestServiceFactory.getClient().createTask(task);
+		try{
+			RestServiceFactory.getClient().createTask(task);
+		} catch (NotAuthorizedException | InternalServerErrorException e){
+			System.err.println("[ERROR] " + e.getMessage().split("\n")[0]);
+			return;
+		}
 		
 	}
 		
